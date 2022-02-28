@@ -1,0 +1,90 @@
+<!-- <query-builder [(ngModel)]='query' [config]='config'></query-builder> -->
+
+<div class="main-container">
+	<header class="header-2">
+		<div class="branding">
+			<a class="nav-link">
+				<clr-icon shape="home" size="24"></clr-icon>
+				<span class="title">Project Clarity</span>
+			</a>
+		</div>
+		<div class="header-nav">
+			<a class="active nav-link nav-text">Home</a>
+		</div>
+	</header>
+	<div class="content-container">
+		<div class="content-area">
+    {{query | json}}
+
+			<query-builder [(ngModel)]='query' [config]='config'>
+    <ng-container
+      *queryButtonGroup="let ruleset; let addRule=addRule; let addRuleSet=addRuleSet; let removeRuleSet=removeRuleSet">
+      <div class="btn-group btn-primary btn-icon btn-sm">
+        <button class="btn" (click)="addRule()">Rule
+          <clr-icon shape="plus" title="Rule"></clr-icon>
+        </button>
+        <button class="btn" (click)="addRuleSet()">RuleSet
+          <clr-icon shape="plus-circle" title="Ruleset"></clr-icon>
+        </button>
+        <button class="btn" (click)="removeRuleSet()">removeRuleSet
+          <clr-icon shape="minus" title="Ruleset"></clr-icon>
+        </button>
+      </div>
+    </ng-container>
+    <ng-container *queryRemoveButton="let rule; let removeRule=removeRule">
+      <button class="btn btn-primary btn-sm btn-icon" (click)="removeRule(rule)">
+        <clr-icon shape="times" title="removeRule"></clr-icon>
+      </button>
+    </ng-container>
+
+    <!-- This is the radio button code that gives the problem if we comment this part the default is working fine-->
+    <ng-container *querySwitchGroup="let ruleset;let onChange=onChange">
+      <ng-container *ngIf="ruleset">
+      <clr-radio-container  clrInline>
+        <clr-radio-wrapper>
+          <input type="radio" clrRadio  [style.padding.px]="10"  value="and" [(ngModel)]="ruleset.condition" (ngModelChange)="onChange($event)"/>
+          <label>And</label>
+        </clr-radio-wrapper>
+        <clr-radio-wrapper>
+          <input type="radio" clrRadio  [style.padding.px]="10"  value="or" [(ngModel)]="ruleset.condition" (ngModelChange)="onChange($event)"/>
+          <label>Or</label>
+        </clr-radio-wrapper>
+      </clr-radio-container>
+      </ng-container>
+    </ng-container>
+    <!-- until here -->
+
+
+     <ng-container *queryEntity="let rule; let entities=entities; let onChange=onChange">   
+        <clr-select-container style="display: inline-block; padding: 0px 0 12px 12px; width: auto; margin-top: 0.4rem">
+        <select clrSelect [(ngModel)]="rule.entity" (ngModelChange)="onChange($event, rule)">
+          <option *ngFor="let entity of entities" [value]="entity.value">{{entity.name}}</option>
+        </select>
+      </clr-select-container>
+    </ng-container>
+
+    <ng-container *queryField="let rule; let fields=fields; let changeField=changeField">
+      <clr-select-container style="display: inline-block; padding: 0px 0 12px 12px; width: auto; margin-top: 0.4rem">
+        <select clrSelect [(ngModel)]="rule.field" (ngModelChange)="changeField($event, rule)">
+          <option *ngFor="let field of fields" [value]="field.value">{{field.name}}</option>
+        </select>
+      </clr-select-container>
+    </ng-container>
+
+    <ng-container *queryOperator="let rule; let operators=operators">
+      <clr-select-container style="display: inline-block; padding: 0px 0 12px 12px; width: auto; margin-top: 0.4rem">
+        <select clrSelect [(ngModel)]="rule.operator">
+          <option *ngFor="let value of operators" [value]="value">{{value}}</option>
+        </select>
+      </clr-select-container>
+    </ng-container>
+    
+    <ng-container *queryInput="let rule; let field=field; type: 'string'; let onChange=onChange">
+      <clr-input-container style="display: inline-block; padding: 0px 0 12px 12px; width: auto; margin-top: 0.4rem">
+        <input clrInput placeholder="Fill me in" [(ngModel)]="rule.value" (ngModelChange)="onChange()" />
+      </clr-input-container>
+    </ng-container>
+  </query-builder>
+		</div>
+	</div>
+</div>
